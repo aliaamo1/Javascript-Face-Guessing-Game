@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+  <head>
+    <h1 style="font-family:Helvetica"> Matching Game </h1>
+    <p style="font-family:Helvetica"> Click on the extra smiling face on the left </p>
+    <style>
+      img {
+      	position: absolute;
+      }
+      div {
+      	position: absolute;
+      	width:500px;
+      	height: 500px;
+      }
+      #rightSide {
+      	left: 500px;
+      	border-left:  1px solid black;
+      }
+    </style>
+  </head>
+  <body id="theBody" onload="generateFaces()">
+    <div id="leftSide"></div>
+    <div id="rightSide"></div>
+    <script>
+       var numberOfFaces = 5;
+       var theRightSide = document.getElementById("rightSide");
+       var theLeftSide = document.getElementById("leftSide");
+       var theBody = document.getElementById("theBody");
+
+
+       function generateFaces() {
+        for(var i = 0; i < numberOfFaces; i++) {
+          var pic = document.createElement("img");
+          var top = Math.floor(Math.random()*400); //to return an int
+          var left = Math.floor(Math.random()*400);
+
+          pic.src="http://home.cse.ust.hk/~rossiter/mooc/matching_game/smile.png";
+          pic.style.top = top + "px";
+          pic.style.left = left + "px";
+          theLeftSide.appendChild(pic);
+        }
+          var leftImages = document.getElementById("leftSide"); 
+          var rightSideImages = leftImages.cloneNode(true);
+          
+          rightSideImages.removeChild(rightSideImages.lastChild);
+          theRightSide.appendChild(rightSideImages);
+
+       
+
+       //event handler function for the extra face on the LHS
+       theLeftSide.lastChild.onclick= 
+           function nextLevel(event) {
+              event.stopPropagation();
+              while(leftImages.firstChild){
+                leftImages.removeChild(leftImages.firstChild);
+              }
+              while(rightSideImages.firstChild) {
+                rightSideImages.removeChild(rightSideImages.firstChild);
+              }
+              numberOfFaces += 5;
+              generateFaces();
+          }
+
+      //event handler function for body, in the even user clicks on background
+      theBody.onclick = function gameOver() {
+        alert("Game Over!");
+        theBody.onclick = null;
+        theLeftSide.lastChild.onclick = null;
+      }
+
+    }
+    </script>
+  </body>
